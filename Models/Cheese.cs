@@ -11,6 +11,7 @@ namespace CheeseMVC.Models
         private static int nextID = 1;
         public string Name { get; set; }
         public string Description { get; set; }
+        public CheeseType Type { get; set; }
         public int ID { get; set;}
 
         public Cheese()

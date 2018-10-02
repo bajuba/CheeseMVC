@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using CheeseMVC.Models;
+using CheeseMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheeseMVC.Controllers
@@ -13,26 +14,31 @@ namespace CheeseMVC.Controllers
 
         public IActionResult Index()
         {
-    
-            ViewBag.cheeses = CheeseData.GetAll();
-
-            return View();
+            List<Cheese> cheeses = CheeseData.GetAll();
+            //ViewBag.cheeses = CheeseData.GetAll();
+            ViewBag.Title = "Hello";
+            return View(cheeses);
         }
         public IActionResult Add()
         {
-            return View();
+            AddCheeseViewModel addCheeseVM = new AddCheeseViewModel();
+            return View(addCheeseVM);
         }
-        [Route("Cheese/Add")]
         [HttpPost]
-        public IActionResult NewCheese(Cheese newCheese)
+        public IActionResult Add(AddCheeseViewModel addCheeseVM)
         {   
-            /* Cheese newCheese = new Cheese 
+            if(ModelState.IsValid)
             {
-                Name = name,
-                Description = description
-            }; */
-            CheeseData.Add(newCheese);
-            return Redirect("/Cheese");
+                Cheese newCheese = new Cheese 
+                {
+                    Name = addCheeseVM.Name,
+                    Description = addCheeseVM.Description,
+                    Type = addCheeseVM.Type
+                };
+                CheeseData.Add(newCheese);
+                return Redirect("/");
+            }
+            return View(addCheeseVM);
         }
         public IActionResult Remove()
         {
